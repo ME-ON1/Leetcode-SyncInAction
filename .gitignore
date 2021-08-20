@@ -1,0 +1,4 @@
+.github/src/node_modules
+.github/src/copy.json
+.github/src/.env
+.github/src/package-lock.json
