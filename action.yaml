@@ -7,9 +7,6 @@ inputs:
   cookieVal
     description : "leetcode cookie value to get your data value"
     required : true
-  repo_location :
-    description : "location of repo where solutions would be stored"
-    required : false
   solution_location
     description : "location of folder in repo where solution will be stored"
     required : false
