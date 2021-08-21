@@ -9,24 +9,22 @@ const {Worker , workerData } = require("worker_threads")
 const core = require("@actions/core")
 
 
+const {SolutionDetails} = require(`${path.join(__dirname,'SolutionDetails.js')}`)
+const worker = new Worker(`${path.join(__dirname, 'worker.js')}`)
+
 const INTERVAL = 3000;
 
 const URL = "https://leetcode.com/api/submissions/"
-const PROBLEM_URL = "https://leetcode.com/api/problems/all"
 
-const all_problems = require("./problemstat.json");
+const all_problems = require(`${path.join(__dirname, 'copy.json')}`);
 
 const cookieVal = core.getInput('cookieVal')
 const SOLUTION_LOCATION = core.getInput('solution_location')
-
 
 if(cookieVal === null || cookieVal === undefined || cookieVal.length === 0)
 {
 	throw 'Set COOKIE_SECRET in repo secrets'
 }
-
-
-const {SolutionDetails} = require("./SolutionDetails.js")
 
 const readFileDir = util.promisify(fs.readdir)
 
@@ -57,7 +55,6 @@ SolutionDetails.prototype.IsPresent = function(){
 	}
 }
 
-const worker = new Worker('./worker.js' )
 
 worker.on('message', ()=>{
 	console.log("done writing")
@@ -76,13 +73,13 @@ worker.on('exit', ()=>{
 })
 
 let solutionPromise = (question) => new Promise((resolve, reject) => {
-	axios({
-		method : 'GET',
-		baseURL : `${URL}${question.question__title_slug}`,
-		headers : {
-			cookie : cookieVal
-		}
-	})
+		axios({
+			method : 'GET',
+			baseURL : `${URL}${question.question__title_slug}`,
+			headers : {
+				cookie : cookieVal
+			}
+		})
 		.then(async (res)=>{
 				worker.postMessage({workerData : res.data} )
 				resolve()
@@ -146,7 +143,6 @@ const FileWriteHdl = async bVal => {
 				const sol_obj = new SolutionDetails(bVal[i]);
 				if(!sol_obj.IsPresent())
 				{
-					console.log("running")
 					await sol_obj.fmtHdl()
 					aldyPresentSol[this.id] = 1 ;
 				}

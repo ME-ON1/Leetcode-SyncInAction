@@ -17,6 +17,7 @@ parentPort.on('message' , (data) => {
 
 const writeSol = (data) => {
 	const solutionDetails = data.submissions_dump
+	console.log(data, "data to write! ")
 	if (solutionDetails.length > 0 )
 	{
 		for(let i = 0 ; i < solutionDetails.length ; i++ )
