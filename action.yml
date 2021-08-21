@@ -1,7 +1,7 @@
-name: "LeetCode-collectinator"
-author: "Tarun Sharma (Me-On1)"
-
+name: LeetCode-collectinator
 description: "Sync your leetcode solutions with your github repo"
+
+author: Tarun Sharma (ME-ON1)
 
 inputs:
   cookieVal
