@@ -10,23 +10,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Setup node
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14
-      - uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
 
+      - name : Set up node and npm
+        run : |
+          cd ./.github/src/
+          npm install
+          cd ./.github/src
       # Runs a single command using the runners shell
-      - name: Run the fetching script
+      - name: Time to download script
         uses : ./
-        run: |
-          cd .github/src/
-          npm install --save
-          node app.js
-        env :
-          COOKIE_SECRET : ${{secrets.COOKIE_SECRET}}
+
       - name: pushing the changes!!
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
