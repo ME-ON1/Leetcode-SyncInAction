@@ -1,10 +1,11 @@
 const fs = require("fs")
 
 const util = require("util")
-
+const core = require("@actions/core")
 const readFileDir = util.promisify(fs.readdir)
 const codeWrite = util.promisify(fs.writeFile)
 
+const SOLUTION_LOCATION = core.getInput('solution_location') // relative to root directory default is root directory
 
 function SolutionDetails({id, lang , runtime, memory, code, title_slug})
 {
@@ -31,7 +32,7 @@ SolutionDetails.prototype.fmtHdl = async function(){
 
 SolutionDetails.prototype._fileWriteHdl = async function() {
 	try {
-		await codeWrite(`../../${this.id}_${this.title_slug}.${this.ext}`,this.fmtData)
+		await codeWrite(`${SOLUTION_LOCATION}/${this.id}_${this.title_slug}.${this.ext}`,this.fmtData)
 		console.log("file written")
 	}
 	catch(er)

@@ -3,20 +3,22 @@ const path = require("path")
 require("dotenv").config()
 
 const axios = require("axios").default
-
 const fs = require("fs")
-
 const util = require("util")
+const {Worker , workerData } = require("worker_threads")
+const core = require("@actions/core")
+
 
 const INTERVAL = 3000;
-const {Worker , workerData } = require("worker_threads")
 
 const URL = "https://leetcode.com/api/submissions/"
 const PROBLEM_URL = "https://leetcode.com/api/problems/all"
 
 const all_problems = require("./problemstat.json");
 
-const cookieVal = process.env.COOKIE_SECRET ;
+const cookieVal = core.getInput('cookieVal')
+const SOLUTION_LOCATION = core.getInput('solution_location')
+
 
 if(cookieVal === null || cookieVal === undefined || cookieVal.length === 0)
 {
@@ -32,7 +34,7 @@ let aldyPresentSol = {}
 
 function mapFileWithId(){
 	return new Promise( async (resolve , reject ) => {
-		const subPresent = await readFileDir("../../") ;
+		const subPresent = await readFileDir(`${SOLUTION_LOCATION}`) ;
 		subPresent.map(val => {
 			if(val.indexOf("_") >= 0)
 			{
@@ -56,7 +58,6 @@ SolutionDetails.prototype.IsPresent = function(){
 }
 
 const worker = new Worker('./worker.js' )
-
 
 worker.on('message', ()=>{
 	console.log("done writing")
@@ -83,13 +84,12 @@ let solutionPromise = (question) => new Promise((resolve, reject) => {
 		}
 	})
 		.then(async (res)=>{
-				//console.log(res.data)
-				console.log(res, "reaching herre")
 				worker.postMessage({workerData : res.data} )
 				resolve()
 		})
 		.catch(err => {
 			console.log("err",err.message)
+			core.error('there is something wrong in here!')
 		})
 		.then(()=>{
 			clearTimeout(sleep)
@@ -111,12 +111,12 @@ async function OneTimeFetch(){
 	}
 	catch(err)
 	{
+		core.error("there was something that goes wrong!")
 		process.exit(err) ;
 	}
 }
 
 async function DailyFetch (){
-	console.log("is it running")
 	try {
 		const r_recentSubmittedSols = await axios({
 			method : 'GET',
@@ -128,11 +128,11 @@ async function DailyFetch (){
 
 		const bVal = r_recentSubmittedSols.data.submissions_dump;
 		await FileWriteHdl(bVal)
-		console.log("reachign here")
 		process.exit()
 	} catch (err)
 	{
 		console.log(err.message )
+		core.error("there was something that goes wrong!")
 		process.exit(err);
 	}
 }

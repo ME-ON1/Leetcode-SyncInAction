@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v2
       - name: Setup node
@@ -17,16 +17,16 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
-        
+
       # Runs a single command using the runners shell
-      - name: Run the downloader script
+      - name: Run the fetching script
+        uses : ./
         run: |
           cd .github/src/
-          echo ${{ secrets.COOKIE_SECRET }}
-          npm install --save 
+          npm install --save
           node app.js
-        env : 
-          COOKIE_SECRET : ${{secrets.COOKIE_SECRET}} 
+        env :
+          COOKIE_SECRET : ${{secrets.COOKIE_SECRET}}
       - name: pushing the changes!!
         uses: stefanzweifel/git-auto-commit-action@v4
         with:

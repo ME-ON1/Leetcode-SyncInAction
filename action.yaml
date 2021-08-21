@@ -1,0 +1,24 @@
+name: "LeetCode-collectinator"
+author: "Tarun Sharma (Me-On1)"
+
+description: "Sync your leetcode solutions with your github repo"
+
+inputs:
+  cookieVal
+    description : "leetcode cookie value to get your data value"
+    required : true
+  repo_location :
+    description : "location of repo where solutions would be stored"
+    required : false
+  solution_location
+    description : "location of folder in repo where solution will be stored"
+    required : false
+    default : '.'
+
+runs:
+  using: 'node14'
+  main: './.github/src/app.js'
+
+branding
+  icon: 'git-commit'
+  color : 'purple'
