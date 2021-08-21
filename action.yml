@@ -4,10 +4,10 @@ description: "Sync your leetcode solutions with your github repo"
 author: Tarun Sharma (ME-ON1)
 
 inputs:
-  cookieVal
+  cookieVal:
     description : "leetcode cookie value to get your data value"
     required : true
-  solution_location
+  solution_location:
     description : "location of folder in repo where solution will be stored"
     required : false
     default : '.'
