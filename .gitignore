@@ -2,4 +2,4 @@
 .github/src/copy.json
 .github/src/.env
 
-./src/node_modules
+src/node_modules
