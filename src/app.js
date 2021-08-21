@@ -16,7 +16,7 @@ const INTERVAL = 3000;
 
 const URL = "https://leetcode.com/api/submissions/"
 
-const all_problems = require(`${path.join(__dirname, 'copy.json')}`);
+const all_problems = require(`${path.join(__dirname, 'problemstat.json')}`);
 
 const cookieVal = core.getInput('cookieVal')
 const SOLUTION_LOCATION = core.getInput('solution_location')
