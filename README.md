@@ -36,8 +36,8 @@ Example use case of action in your WORKFLOWS.
         -name : Using LC-Collectinator
          uses : ME-ON1/Leetcode-SyncInAction
             with :
-              cookieVal : ${{ secrets.cookieVal }} # secrets.cookieVal coming from repository secret    
-              solution_location : 'path/to/directory'  # if any , default is root '.'
+              cookieVal : ${{ secrets.COOKIE_SECRET }} # secrets.cookieVal coming from repository secret    
+              solution_location : path/to/directory  # if any , default is root ./
           
         # dependency, to write newly created files to the root directory of the repository.  
     
