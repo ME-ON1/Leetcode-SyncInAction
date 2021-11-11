@@ -5,10 +5,11 @@ const core = require("@actions/core")
 const readFileDir = util.promisify(fs.readdir)
 const codeWrite = util.promisify(fs.writeFile)
 
-const SOLUTION_LOCATION = core.getInput('solution_location') // relative to root directory default is root directory
+// relative to root directory default is root directory
+const {SOLUTION_LOCATION} = require("./helper")
 
-function SolutionDetails({id, lang , runtime, memory, code, title_slug})
-{
+
+function SolutionDetails({id, lang, runtime, memory, code, title_slug}) {
 	this.id = id
 	this.lang = lang
 	this.memory = memory
@@ -20,8 +21,8 @@ function SolutionDetails({id, lang , runtime, memory, code, title_slug})
 }
 
 
-SolutionDetails.prototype.fmtHdl = async function(){
-	this.fmtData += `id = ${this.id} \n` ;
+SolutionDetails.prototype.fmtHdl = async function () {
+	this.fmtData += `id = ${this.id} \n`;
 	this.fmtData += `lang = ${this.lang} \n`
 	this.fmtData += `runtime  = ${this.runtime} \n`
 	this.fmtData += `memory = ${this.memory}\n`
@@ -30,57 +31,55 @@ SolutionDetails.prototype.fmtHdl = async function(){
 	await this._fileWriteHdl()
 }
 
-SolutionDetails.prototype._fileWriteHdl = async function() {
+SolutionDetails.prototype._fileWriteHdl = async function () {
 	try {
-		await codeWrite(`${SOLUTION_LOCATION}/${this.id}_${this.title_slug}.${this.ext}`,this.fmtData)
+		await codeWrite(`${SOLUTION_LOCATION}/${this.id}_${this.title_slug}.${this.ext}`, this.fmtData)
 		console.log("file written")
 	}
-	catch(er)
-	{
-		console.log(er.message ,er )
+	catch (er) {
+		console.log(er.message, er)
 	}
 }
 
-SolutionDetails.prototype._getExtension = function(lang) {
+SolutionDetails.prototype._getExtension = function (lang) {
 
-	switch(lang )
-	{
-		case 'cpp' : this.ext = "cxx"
+	switch (lang) {
+		case 'cpp': this.ext = "cxx"
 			break;
-		case 'javascript' : this.ext = "js"
+		case 'javascript': this.ext = "js"
 			break;
-		case 'python3' : this.ext = "py"
-			break ;
-		case 'java' : this.ext = "java"
+		case 'python3': this.ext = "py"
 			break;
-		case 'golang' : this.ext = "go"
+		case 'java': this.ext = "java"
 			break;
-		case 'rust' : this.ext = "rs"
-			break ;
-		case 'c' : this.ext = "c"
+		case 'golang': this.ext = "go"
 			break;
-		case 'swift' : this.ext = "swift"
-			break ;
-		case 'c#' : this.ext = "cs"
-			break ;
-		case 'ruby' : this.ext = "rb"
-			break ;
-		case 'scala' : this.ext = "sc"
+		case 'rust': this.ext = "rs"
 			break;
-		case 'kotlin' : this.ext = "kt"
-			break ;
-		case 'typescript' : this.ext = 'ts'
+		case 'c': this.ext = "c"
 			break;
-		case 'php' : this.ext = 'php'
+		case 'swift': this.ext = "swift"
 			break;
-		case 'erlang' : this.ext  = 'erl'
+		case 'c#': this.ext = "cs"
 			break;
-		case 'racket' : this.ext = 'rkt'
-			break ;
-		case 'elixir' : this.ext = 'ex'
+		case 'ruby': this.ext = "rb"
 			break;
-		default : this.ext = "md"
-			break ;
+		case 'scala': this.ext = "sc"
+			break;
+		case 'kotlin': this.ext = "kt"
+			break;
+		case 'typescript': this.ext = 'ts'
+			break;
+		case 'php': this.ext = 'php'
+			break;
+		case 'erlang': this.ext = 'erl'
+			break;
+		case 'racket': this.ext = 'rkt'
+			break;
+		case 'elixir': this.ext = 'ex'
+			break;
+		default: this.ext = "md"
+			break;
 	}
 
 	return this.ext
